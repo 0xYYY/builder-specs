@@ -65,8 +65,8 @@ information:
 
 ### Signing and submitting a registration
 
-The validator takes the constructed `ValidatorRegistrationV1` `message` and signs according to the method given in
-the [Builder spec][builder-spec] to make a `signature`.
+The validator takes the constructed `ValidatorRegistrationV1` `message` and signs according to the [method given in
+the Builder spec][builder-spec-signing] to make a `signature`.
 
 This `signature` is placed along with the `message` into a `SignedValidatorRegistrationV1` and submitted to a connected
 beacon node using the [`registerValidator`][register-validator-api] endpoint of the standard validator
@@ -79,7 +79,7 @@ their building preferences are widely available in the external builder network.
 
 Validators are expected to periodically send their own `SignedValidatorRegistrationV1` messages upstream to the external
 builder network using the [`registerValidator`][register-validator-with-builder] endpoint of the standard
-[APIs defined in the builder spec][builder-spec-apis].
+[APIs defined in the Builder spec][builder-spec-apis].
 
 Registrations should be re-submitted frequently enough that any changes to their building preferences can be widely
 spread across the builder network in a timely manner.
@@ -97,7 +97,7 @@ building pathway that can be used concurrently with this local process.
 
 #### Constructing the `BeaconBlockBody`
 
-##### ExecutionPayload
+##### `ExecutionPayload`
 
 To obtain an execution payload, a block proposer building a block on top of a beacon `state` in a given `slot` must take
 the following actions:
@@ -141,9 +141,9 @@ in getting slashed.
 To avoid slashing when using the external builder network, a validator should begin the external build process for an
 `ExecutionPayloadHeader` along with the local build process for an `ExecutionPayload` as soon as they know the required
 parameters to do so. Regardless of which process completes in time, the validator should cancel the other
-process as soon as they have produced a signature for a beacon block, either a `BeaconBlock` **or** a
+process as soon as they have produced a signature for a beacon block, either a `BeaconBlock` **OR** a
 `BlindedBeaconBlock`. Producing distinct signatures for the validator's proposal slot, for example because the
-transactions list of the `BeaconBlockBody` are different, is the slashable offense. This means if a validator publishes
+transactions list of the `BeaconBlockBody` are different, is a slashable offense. This means if a validator publishes
 a signature for a `BlindedBeaconBlock` (via a dissemination of a `SignedBlindedBeaconBlock`) then the validator
 **MUST** not use the local build process as a fallback, even in the event of some failure with the external builder
 network.
@@ -159,6 +159,7 @@ process itself.
 
 [builder-spec]: ./builder.md
 [builder-spec-apis]: ./builder.md#endpoints
+[builder-spec-signing]: ./builder.md#signing
 [register-validator-with-builder]: https://ethereum.github.io/builder-specs/#/Builder/registerValidator
 [validator-registration-v1]: ./builder.md#validatorregistrationv1
 [register-validator-api]: https://ethereum.github.io/beacon-APIs/#/Validator/registerValidator
